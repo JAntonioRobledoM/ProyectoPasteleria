@@ -1,45 +1,49 @@
 <?php
 
 class Dulce {
-    // Atributos
-    private $nombre;
-    private $precio;
-    private $categoria;
-    private static $IVA = 0.21;
+    // Constructor con promoción de propiedades
+    public function __construct(
+        private string $nombre,
+        private float $precio,
+        private string $categoria
+    ) {}
 
-    // Constructor para inicializar propiedades
-    public function __construct($nombre, $precio, $categoria) {
-        $this->nombre = $nombre;
-        $this->precio = $precio;
-        $this->categoria = $categoria;
-    }
+    // Atributo estático para el IVA
+    private static float $IVA = 0.21;
 
     // Getters
-    public function getNombre() {
+    public function getNombre(): string {
         return $this->nombre;
     }
 
-    public function getPrecio() {
+    public function getPrecio(): float {
         return $this->precio;
     }
 
-    public function getCategoria() {
+    public function getCategoria(): string {
         return $this->categoria;
     }
 
     // Método para obtener el IVA
-    public static function getIVA() {
+    public static function getIVA(): float {
         return self::$IVA;
+    }
+
+    // Método para mostrar el resumen del dulce
+    public function mostrarResumen(): void {
+        echo "Dulce.php: <br>";
+        echo "Nombre: " . $this->getNombre() . "<br>";
+        echo "Precio: " . $this->getPrecio() . "€<br>";
+        echo "Categoría: " . $this->getCategoria() . "<br>";
+        echo "IVA: " . (self::getIVA() * 100) . "%<br>";
+        echo "<br><br>";
     }
 }
 
 // Creación de objeto de la clase Dulce
 $dulce = new Dulce("Tarta de Fresa", 15.50, "Tartas");
 
-// Mostrar las propiedades por pantalla
-echo "Nombre: " . $dulce->getNombre() . "<br>";
-echo "Precio: " . $dulce->getPrecio() . "€<br>";
-echo "Categoría: " . $dulce->getCategoria() . "<br>";
-echo "IVA: " . (Dulce::getIVA() * 100) . "%<br>";
+// Llamada al método mostrarResumen
+$dulce->mostrarResumen();
 
 ?>
