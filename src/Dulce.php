@@ -1,6 +1,9 @@
 <?php
 
-class Dulce {
+require_once "Resumible.php";
+
+// Clase abstracta Dulce implementando la interfaz Resumible
+abstract class Dulce implements Resumible {
     // Constructor con promoción de propiedades
     public function __construct(
         private string $nombre,
@@ -29,8 +32,8 @@ class Dulce {
         return self::$IVA;
     }
 
-    // Método para mostrar el resumen del dulce
-    public function mostrarResumen(): void {
+    // Implementación del método muestraResumen() desde la interfaz
+    public function muestraResumen(): void {
         echo "Dulce.php: <br>";
         echo "Nombre: " . $this->getNombre() . "<br>";
         echo "Precio: " . $this->getPrecio() . "€<br>";
@@ -39,11 +42,16 @@ class Dulce {
         echo "<br><br>";
     }
 }
-
-// Creación de objeto de la clase Dulce
-$dulce = new Dulce("Tarta de Fresa", 15.50, "Tartas");
-
-// Llamada al método mostrarResumen
-$dulce->mostrarResumen();
-
+/* Convertir "Dulce" en abstracta permite:
+ 1. Evitar que se creen instancias directas de `Dulce`.
+ 2. Forzar a las clases hijas a implementar ciertos métodos clave.
+ Esto mejora la estructura y asegura que cada clase derivada cumpla con un contrato común.*/
+ 
+/*
+ * Al hacer que "Dulce" implemente la interfaz `Resumible`, forzamos a todas las clases
+ * que heredan de `Dulce` a implementar el método `muestraResumen()`. Sin embargo, 
+ * las clases hijas pueden sobrescribir este método si necesitan una implementación específica.
+ */
 ?>
+
+

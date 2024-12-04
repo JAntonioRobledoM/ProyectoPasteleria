@@ -14,8 +14,8 @@ class Bollo extends Dulce {
         parent::__construct($nombre, $precio, $categoria);
     }
 
-    // Método sobrescrito para mostrar el resumen del bollo
-    public function muestraResumen() {
+    // Implementación del método abstracto para mostrar el resumen del bollo
+    public function muestraResumen(): void {
         echo "Bollo.php: <br>";
         echo "Nombre: " . $this->getNombre() . "<br>";
         echo "Precio: " . $this->getPrecio() . "€<br>";

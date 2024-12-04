@@ -15,8 +15,8 @@ class Chocolate extends Dulce {
         parent::__construct($nombre, $precio, $categoria);
     }
 
-    // Método para mostrar el resumen del chocolate
-    public function muestraResumen() {
+    // Implementación del método abstracto para mostrar el resumen del chocolate
+    public function muestraResumen(): void {
         echo "Chocolate.php: <br>";
         echo "Nombre: " . $this->getNombre() . "<br>";
         echo "Precio: " . $this->getPrecio() . "€<br>";
