@@ -3,6 +3,9 @@
 require_once 'Dulce.php';
 require_once 'Cliente.php';
 
+use Util\DulceNoCompradoException;
+use Util\ClienteNoEncontradoException;
+
 class Pasteleria {
     // Propiedades privadas con promoción de constructor
     public function __construct(
@@ -18,7 +21,7 @@ class Pasteleria {
 
     // Método privado para incluir un producto en el array
     private function incluirProducto(Dulce $dulce): void {
-        $this->productos[] = $dulce; // Agregar al array (puede repetirse)
+        $this->productos[] = $dulce; // Agregar al array 
     }
 
     // Método para incluir un cliente
@@ -40,6 +43,35 @@ class Pasteleria {
         echo "Clientes registrados en la pastelería:<br>";
         foreach ($this->clientes as $index => $cliente) {
             echo ($index + 1) . ". " . $cliente->getNombre() . " (Pedidos realizados: " . $cliente->getNumPedidosEfectuados() . ")<br>";
+        }
+    }
+
+    // Método para realizar compras 
+    public function realizarCompra(Cliente $cliente, Dulce $dulce): void {
+        try {
+            // Intentamos realizar la compra
+            $cliente->comprar($dulce);
+            echo "Compra realizada: " . $dulce->getNombre() . " por " . $cliente->getNombre() . "<br>";
+        } catch (DulceNoCompradoException $e) {
+            // Si se lanza la excepción, informamos al usuario
+            echo "Error: " . $e->getMessage() . "<br>";
+        } catch (ClienteNoEncontradoException $e) {
+            // Si se lanza la excepción, informamos al usuario
+            echo "Error: " . $e->getMessage() . "<br>";
+        }
+    }
+
+    // Método para realizar una valoración 
+    public function valorarDulce(Cliente $cliente, Dulce $dulce, string $comentario): void {
+        try {
+            // Intentamos valorar el dulce
+            $cliente->valorar($dulce, $comentario);
+        } catch (DulceNoCompradoException $e) {
+            // Si se lanza la excepción, informamos al usuario
+            echo "Error: " . $e->getMessage() . "<br>";
+        } catch (ClienteNoEncontradoException $e) {
+            // Si se lanza la excepción, informamos al usuario
+            echo "Error: " . $e->getMessage() . "<br>";
         }
     }
 }
@@ -69,10 +101,17 @@ $pasteleria->incluirCliente($cliente1);
 $pasteleria->incluirCliente($cliente2);
 
 // Realizar compras
-$cliente1->comprar($bollo);
-$cliente1->comprar($chocolate);
-$cliente2->comprar($chocolate);
+$pasteleria->realizarCompra($cliente1, $bollo);
+$pasteleria->realizarCompra($cliente1, $chocolate);
+$pasteleria->realizarCompra($cliente2, $chocolate);
 
 // Listar productos y clientes
 $pasteleria->listarProductos();
 $pasteleria->listarClientes();
+
+// Realizar valoraciones (con manejo de excepciones)
+$pasteleria->valorarDulce($cliente1, $bollo, "Delicioso");
+$pasteleria->valorarDulce($cliente1, $chocolate, "Exquisito");
+$pasteleria->valorarDulce($cliente2, $bollo, "Muy bueno");
+
+?>

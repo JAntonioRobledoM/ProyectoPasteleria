@@ -2,6 +2,9 @@
 
 require_once 'Dulce.php';
 
+use Util\DulceNoCompradoException;
+use Util\ClienteNoEncontradoException;
+
 class Cliente {
     // Constructor con promoción de propiedades
     public function __construct(
@@ -35,29 +38,29 @@ class Cliente {
     }
 
     // Método comprar
-    public function comprar(Dulce $d): bool {
+    public function comprar(Dulce $d): self {
         if ($this->listaDeDulces($d)) {
             echo "El dulce ya ha sido comprado anteriormente. Agregado nuevamente.<br>";
         } else {
             echo "Nuevo dulce agregado al carrito.<br>";
         }
         $this->dulcesComprados[] = $d;
-        $this->numPedidosEfectuados++;  // Actualizamos el número de pedidos cada vez que se compra un dulce
-        return true;
+        $this->numPedidosEfectuados++; // Actualizamos el número de pedidos
+        return $this; // Permite encadenar métodos
     }
 
     // Método valorar
-    public function valorar(Dulce $d, string $comentario): void {
-        if ($this->listaDeDulces($d)) {
-            $this->comentarios[spl_object_hash($d)] = $comentario;
-            echo "Comentario añadido al dulce: \"" . $d->getNombre() . "\".<br>";
-        } else {
-            echo "No se puede valorar un dulce que no se ha comprado.<br>";
+    public function valorar(Dulce $d, string $comentario): self {
+        if (!$this->listaDeDulces($d)) {
+            throw new DulceNoCompradoException("No se puede valorar un dulce que no se ha comprado: " . $d->getNombre());
         }
+        $this->comentarios[spl_object_hash($d)] = $comentario;
+        echo "Comentario añadido al dulce: \"" . $d->getNombre() . "\".<br>";
+        return $this; 
     }
 
     // Método listarPedidos
-    public function listarPedidos(): void {
+    public function listarPedidos(): self {
         echo "El cliente " . $this->nombre . " ha realizado " . $this->numPedidosEfectuados . " pedidos:<br>";
         foreach ($this->dulcesComprados as $index => $dulce) {
             echo ($index + 1) . ". " . $dulce->getNombre();
@@ -66,6 +69,7 @@ class Cliente {
             }
             echo "<br><br>";
         }
+        return $this;
     }
 
     // Método para mostrar el resumen del cliente
@@ -75,5 +79,4 @@ class Cliente {
         echo "Número de pedidos efectuados: " . $this->numPedidosEfectuados . "<br>";
         echo "<br><br>";
     }
-
 }
