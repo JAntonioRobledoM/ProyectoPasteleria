@@ -2,8 +2,11 @@
 
 require_once 'Dulce.php';
 
-use Util\DulceNoCompradoException;
-use Util\ClienteNoEncontradoException;
+require_once __DIR__ . '/../util/DulceNoCompradoException.php';
+require_once __DIR__ . '/../util/PasteleriaException.php';
+
+use util\DulceNoCompradoException; 
+use util\ClienteNoEncontradoException;
 
 class Cliente {
     // Constructor con promoción de propiedades

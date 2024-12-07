@@ -3,8 +3,11 @@
 require_once 'Dulce.php';
 require_once 'Cliente.php';
 
-use Util\DulceNoCompradoException;
-use Util\ClienteNoEncontradoException;
+require_once __DIR__ . '/../util/DulceNoCompradoException.php';
+require_once __DIR__ . '/../util/PasteleriaException.php';
+
+use util\DulceNoCompradoException;
+use util\ClienteNoEncontradoException;
 
 class Pasteleria {
     // Propiedades privadas con promoción de constructor

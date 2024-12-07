@@ -1,6 +1,6 @@
 <?php
 
-namespace Util;
+namespace util;
 
 require_once "PasteleriaException.php";
 
