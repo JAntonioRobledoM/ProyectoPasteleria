@@ -1,20 +1,29 @@
 <?php
 
 require_once "Resumible.php";
+require_once __DIR__ . '/../db/DB.php';  
 
 // Clase abstracta Dulce implementando la interfaz Resumible
 abstract class Dulce implements Resumible {
+
+    private int $id;
+
     // Constructor con promoción de propiedades
     public function __construct(
         private string $nombre,
         private float $precio,
         private string $categoria
-    ) {}
+    ) {
+    }
 
     // Atributo estático para el IVA
     private static float $IVA = 0.21;
 
     // Getters
+    public function getId(): ?int {
+        return $this->id;
+    }
+
     public function getNombre(): string {
         return $this->nombre;
     }
@@ -25,6 +34,10 @@ abstract class Dulce implements Resumible {
 
     public function getCategoria(): string {
         return $this->categoria;
+    }
+
+    public function setId(int $id): void {
+        $this->id = $id;
     }
 
     // Método para obtener el IVA
@@ -39,19 +52,82 @@ abstract class Dulce implements Resumible {
         echo "Precio: " . $this->getPrecio() . "€<br>";
         echo "Categoría: " . $this->getCategoria() . "<br>";
         echo "IVA: " . (self::getIVA() * 100) . "%<br>";
+        echo "ID: " . ($this->getId() ?? "No asignado") . "<br>";
         echo "<br><br>";
     }
+
+    // Operación CRUD: Crear un dulce en la base de datos
+    public function crearDulce(): bool {
+        try {
+            $db = DB::getConnection();  // Obtener conexión a la base de datos
+            $nombre = $this->getNombre();
+            $precio = $this->getPrecio();
+            $categoria = $this->getCategoria();
+
+            $query = "INSERT INTO dulces (nombre, precio, categoria) VALUES (:nombre, :precio, :categoria)";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':precio', $precio);
+            $stmt->bindParam(':categoria', $categoria);
+            $stmt->execute();
+
+            $this->setId($db->lastInsertId());  // Establecer el ID del dulce creado
+            return true;
+        } catch (PDOException $e) {
+            echo "Error al crear el dulce: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // Operación CRUD: Leer todos los dulces
+    public static function obtenerDulces(): array {
+        try {
+            $db = DB::getConnection();
+            $query = "SELECT * FROM dulces";
+            $stmt = $db->query($query);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error al obtener los dulces: " . $e->getMessage();
+            return [];
+        }
+    }
+
+    // Operación CRUD: Actualizar un dulce
+    public function actualizarDulce(): bool {
+        try {
+            $db = DB::getConnection();
+            $query = "UPDATE dulces SET nombre = :nombre, precio = :precio, categoria = :categoria WHERE id = :id";
+            $stmt = $db->prepare($query);
+
+            $nombre = $this->getNombre();
+            $precio = $this->getPrecio();
+            $categoria = $this->getCategoria();
+            $id = $this->getId();
+
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':precio', $precio);
+            $stmt->bindParam(':categoria', $categoria);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Error al actualizar el dulce: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // Operación CRUD: Eliminar un dulce
+    public static function eliminarDulce(int $id): bool {
+        try {
+            $db = DB::getConnection();
+            $query = "DELETE FROM dulces WHERE id = :id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Error al eliminar el dulce: " . $e->getMessage();
+            return false;
+        }
+    }
 }
-/* Convertir "Dulce" en abstracta permite:
- 1. Evitar que se creen instancias directas de `Dulce`.
- 2. Forzar a las clases hijas a implementar ciertos métodos clave.
- Esto mejora la estructura y asegura que cada clase derivada cumpla con un contrato común.*/
- 
-/*
- * Al hacer que "Dulce" implemente la interfaz `Resumible`, forzamos a todas las clases
- * que heredan de `Dulce` a implementar el método `muestraResumen()`. Sin embargo, 
- * las clases hijas pueden sobrescribir este método si necesitan una implementación específica.
- */
+
 ?>
-
-
