@@ -12,10 +12,12 @@ class Cliente {
     private $pdo;
     private int $id;  
 
-    // Constructor con promoción de propiedades y conexión a la base de datos
+    // Constructor con atributos de usuario y contraseña
     public function __construct(
         private string $nombre,
         private string $numero, 
+        private string $usuario,  
+        private string $password, 
         private int $numPedidosEfectuados = 0,
         private array $dulcesComprados = [],
         private array $comentarios = [],   
@@ -34,9 +36,12 @@ class Cliente {
         return $this->numero;
     }
 
-    // GETTER PARA USUARIO
     public function getUsuario(): string {
-        return $this->numero;  
+        return $this->usuario;  
+    }
+
+    public function getPassword(): string {
+        return $this->password;  
     }
 
     public function getNumPedidosEfectuados(): int {
@@ -47,7 +52,6 @@ class Cliente {
         return $this->dulcesComprados;
     }
 
-    // Getter para el id
     public function getId(): int {
         return $this->id;
     }
@@ -56,7 +60,7 @@ class Cliente {
     public function guardar(): bool {
         // Verificar si el cliente ya existe
         $stmt = $this->pdo->prepare('SELECT id FROM clientes WHERE usuario = :usuario');
-        $stmt->bindParam(':usuario', $this->numero);
+        $stmt->bindParam(':usuario', $this->usuario);
         $stmt->execute();
         $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -70,8 +74,8 @@ class Cliente {
         // Insertar el cliente en la base de datos
         $stmt = $this->pdo->prepare('INSERT INTO clientes (nombre, usuario, password, numPedidosEfectuados) VALUES (:nombre, :usuario, :password, :numPedidosEfectuados)');
         $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':usuario', $this->numero);
-        $stmt->bindValue(':password', password_hash($this->numero, PASSWORD_DEFAULT)); // Hash de la contraseña
+        $stmt->bindParam(':usuario', $this->usuario);
+        $stmt->bindValue(':password', password_hash($this->password, PASSWORD_DEFAULT)); // Hash de la contraseña
         $stmt->bindParam(':numPedidosEfectuados', $this->numPedidosEfectuados);
         $stmt->execute();
 
