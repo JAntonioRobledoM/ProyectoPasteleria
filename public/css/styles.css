@@ -25,3 +25,115 @@ body {
     color: #e74c3c; /* Rojo suave para los mensajes de error */
     font-size: 14px;
 }
+.welcome-container {
+    text-align: center;
+    padding: 50px;
+}
+.btn-logout {
+    background-color: #f9a825; /* Amarillo pastel */
+    color: white;
+    border: none;
+}
+.btn-logout:hover {
+    background-color: #e58900; /* Un tono más oscuro */
+}
+
+/*NAVBAR*/
+
+.navbar {
+    background-color: #dfb8e3; /* Verde pastel */
+}
+.navbar-brand, .nav-link {
+    font-weight: bold;
+    color: #fff !important;
+}
+.navbar-brand:hover, .nav-link:hover {
+    color: #dff7ec !important; /* Tono más claro al pasar el cursor */
+}
+.navbar-nav {
+    margin: 0 auto; /* Centra las opciones */
+}
+
+/*CARROUSEL*/
+
+.carousel-inner {
+    background-color: #f8e1d4; /* Color pastel suave */
+    border-radius: 10px;
+}
+
+/* Ajuste de tamaño de las imágenes */
+.carousel-item img {
+    max-height: 400px; /* Altura máxima de las imágenes */
+    object-fit: cover; /* Mantiene la proporción de las imágenes */
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+/* Estilo de los textos del carrusel */
+.carousel-caption h5 {
+    color: #ffffff; /* Color pastel para los títulos */
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    color: #ffffff; /* Color gris suave */
+    font-size: 1.2rem;
+}
+
+/*INFO*/
+
+.section {
+    padding: 40px 15px; /* Menos relleno en los laterales para permitir que se expanda más */
+}
+
+.container {
+    max-width: 75%; /* El contenedor ocupará el 75% del ancho disponible */
+    padding: 0 15px; /* Ajustamos el relleno para que no haya espacio extra en los laterales */
+}
+
+.photo-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-left: 0;  /* Ajuste para eliminar los márgenes negativos */
+    margin-right: 0;
+}
+
+.photo-text img {
+    width: 100%; /* La imagen ocupará el 100% del ancho disponible */
+    height: 300px; /* Fijamos la altura para que todas las imágenes tengan el mismo tamaño */
+    object-fit: cover; /* Mantiene la proporción y cubre el área sin distorsión */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.photo-text .content {
+    padding: 20px;
+    margin-left: 20px; /* Espacio entre la imagen y el contenido */
+}
+
+/*FOOTER*/
+
+footer {
+    background-color: #f8e1d4; /* Fondo pastel suave */
+}
+
+footer h5 {
+    font-weight: bold;
+    color: #b37373; /* Color pastel para los encabezados */
+}
+
+footer ul li a {
+    color: #b37373; /* Color pastel para los enlaces */
+    text-decoration: none;
+}
+
+footer ul li a:hover {
+    color: #dff7ec; /* Color de enlace al pasar el cursor */
+}
