@@ -1,70 +1,58 @@
 -- Creación de la base de datos
+DROP DATABASE IF EXISTS pasteleria;
 CREATE DATABASE IF NOT EXISTS pasteleria;
 USE pasteleria;
 
--- Creación de la tabla para los dulces (clase Dulce)
+CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    numero VARCHAR(15) NOT NULL UNIQUE,
+    num_pedidos INT DEFAULT 0
+);
+
 CREATE TABLE IF NOT EXISTS dulces (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
-    descripcion TEXT NOT NULL,
-    categoria VARCHAR(100) NOT NULL
+    categoria ENUM('Bollería', 'Chocolates', 'Tartas') NOT NULL,
+    relleno TEXT,
+    porcentaje_cacao INT,
+    peso INT,
+    min_comensales INT DEFAULT 2,
+    max_comensales INT DEFAULT 2
 );
 
--- Creación de la tabla para los bollos (hereda de Dulce)
-CREATE TABLE IF NOT EXISTS bollos (
+CREATE TABLE IF NOT EXISTS compras (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    dulce_id INT,
-    relleno VARCHAR(255) NOT NULL,
-    FOREIGN KEY (dulce_id) REFERENCES dulces(id)
-);
-
--- Creación de la tabla para los chocolates (hereda de Dulce)
-CREATE TABLE IF NOT EXISTS chocolates (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    dulce_id INT,
-    porcentajeCacao DECIMAL(5, 2) NOT NULL,
-    peso DECIMAL(5, 2) NOT NULL,
-    FOREIGN KEY (dulce_id) REFERENCES dulces(id)
-);
-
--- Creación de la tabla para las tartas (hereda de Dulce)
-CREATE TABLE IF NOT EXISTS tartas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    dulce_id INT,
-    rellenos TEXT NOT NULL, 
-    numPisos INT NOT NULL,
-    minNumComensales INT DEFAULT 2,
-    maxNumComensales INT DEFAULT 10,
-    FOREIGN KEY (dulce_id) REFERENCES dulces(id)
-);
-
--- Creación de la tabla para los clientes
-CREATE TABLE IF NOT EXISTS clientes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    usuario VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    numPedidosEfectuados INT DEFAULT 0
-);
-
--- Creación de la tabla para los pedidos de los clientes
-CREATE TABLE IF NOT EXISTS pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT,
-    dulce_id INT,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cliente_id INT NOT NULL,
+    dulce_id INT NOT NULL,
+    fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (dulce_id) REFERENCES dulces(id)
 );
 
--- Creación de la tabla para las valoraciones de los dulces
-CREATE TABLE IF NOT EXISTS valoraciones (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT,
-    dulce_id INT,
-    comentario TEXT,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-    FOREIGN KEY (dulce_id) REFERENCES dulces(id)
-);
+-- Insertar un bollo
+INSERT INTO dulces (nombre, precio, categoria, relleno) VALUES
+('Bollo de chocolate', 1.50, 'Bollería', 'Chocolate');
+
+-- Insertar un chocolate
+INSERT INTO dulces (nombre, precio, categoria, porcentaje_cacao, peso) VALUES
+('Chocolate oscuro', 2.00, 'Chocolates', 70, 100);
+
+-- Insertar una tarta
+INSERT INTO dulces (nombre, precio, categoria, relleno, min_comensales, max_comensales) VALUES
+('Tarta de fresa', 20.00, 'Tartas', 'Fresa, nata', 2, 6);
+
+-- Insertar clientes
+INSERT INTO clientes (nombre, numero, num_pedidos) VALUES
+('', '12345', 0),
+('María López', '67890', 0),
+('Carlos García', '11223', 0);
+
+UPDATE clientes 
+SET nombre = 'Usuario' 
+WHERE numero = '12345'; 
+
+
+
+

@@ -21,9 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Si es admin, cargar datos adicionales
         if ($usuario === 'admin') {
             $_SESSION['admin'] = true;
-            // Datos de ejemplo para admin
-            $_SESSION['clientes'] = ['Cliente 1', 'Cliente 2', 'Cliente 3'];
-            $_SESSION['dulces'] = ['Tarta de Chocolate', 'Bollo de Fresa', 'Chocolates'];
             header("Location: mainAdmin.php"); // Redirigir a la página principal del admin
             exit();
         }

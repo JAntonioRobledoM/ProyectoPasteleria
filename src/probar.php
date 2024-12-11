@@ -1,19 +1,7 @@
 <?php
-session_start();
+session_start(); // Iniciar la sesión para manejar mensajes
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
-
-$usuario = $_SESSION['usuario'];
-
-require_once '../db/db.php'; 
-require_once '../src/Dulce.php'; 
-require_once '../src/Chocolate.php'; 
-require_once '../src/Bollo.php'; 
-require_once '../src/Tarta.php'; 
+require_once '../db/db.php'; // Asegúrate de que la ruta sea correcta
 
 // Conectar a la base de datos
 $pdo = DB::getConnection();
@@ -97,41 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pastelería OC | TIENDA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <script defer src="js/carrito.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Pastelería</title>
+    <!-- Cargar Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Pastelería OC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="main.php">Página Principal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="tienda.php">Tienda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contacto.php">Contacto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="sobre-nosotros.php">Sobre Nosotros</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-<!-- Listar productos -->
-<div class="container mt-5">
+    <div class="container mt-5">
         <!-- Mostrar mensajes de sesión -->
         <?php
         if (isset($_SESSION['mensaje'])) {
@@ -140,7 +99,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
         }
         ?>
 
-        <h3>Lista de dulces:</h3>
+        <!-- Formulario para agregar un dulce -->
+        <h3>Crear un dulce:</h3>
+        <form method="POST" action="" class="needs-validation" novalidate>
+            <input type="hidden" name="crear_dulce" value="1">
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre del dulce:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="precio" class="form-label">Precio (€):</label>
+                <input type="number" step="0.01" name="precio" id="precio" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría:</label>
+                <select name="categoria" id="categoria" class="form-select" required>
+                    <option value="Bollería">Bollería</option>
+                    <option value="Chocolates">Chocolates</option>
+                    <option value="Tartas">Tartas</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="relleno" class="form-label">Relleno (opcional):</label>
+                <input type="text" name="relleno" id="relleno" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="porcentaje_cacao" class="form-label">Porcentaje de cacao (solo para chocolates):</label>
+                <input type="number" name="porcentaje_cacao" id="porcentaje_cacao" class="form-control" min="0" max="100">
+            </div>
+
+            <div class="mb-3">
+                <label for="peso" class="form-label">Peso (solo para chocolates y tartas):</label>
+                <input type="number" name="peso" id="peso" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="min_comensales" class="form-label">Min. comensales:</label>
+                <input type="number" name="min_comensales" id="min_comensales" class="form-control" value="2" min="1">
+            </div>
+
+            <div class="mb-3">
+                <label for="max_comensales" class="form-label">Max. comensales:</label>
+                <input type="number" name="max_comensales" id="max_comensales" class="form-control" value="2" min="1">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Crear Dulce</button>
+        </form>
+
+        <!-- Mostrar los dulces existentes -->
+        <h3 class="mt-5">Lista de dulces:</h3>
         <div class="list-group">
             <?php
             $sql = "SELECT * FROM dulces";
@@ -152,8 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
                 echo "<div class='list-group-item list-group-item-action'>";
                 echo "<strong>{$dulce['nombre']}</strong><br>";
                 echo "Precio: {$dulce['precio']}€, Categoría: {$dulce['categoria']}<br>";
-            
-                // Información adicional
+
+                // Mostrar información adicional si existe
                 if (!empty($dulce['relleno'])) {
                     echo "Relleno: {$dulce['relleno']}<br>";
                 }
@@ -169,61 +181,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
                 if (isset($dulce['max_comensales'])) {
                     echo "Max. comensales: {$dulce['max_comensales']}<br>";
                 }
-            
+
                 // Botón para comprar el dulce
                 echo "<form method='POST' action='' class='mt-3'>
                         <input type='hidden' name='dulce_id' value='{$dulce['id']}'>
                         <button type='submit' class='btn btn-success'>Comprar</button>
-                      </form>";
-            
-                // Botón para añadir al carrito
-                echo "<button class='btn btn-primary btn-añadir-carrito mt-2' 
-                        data-id='{$dulce['id']}' 
-                        data-nombre='{$dulce['nombre']}' 
-                        data-precio='{$dulce['precio']}'>Añadir al carrito</button>";
-            
+                    </form>";
                 echo "</div><br>";
-
-                
             }
             ?>
-
-<div class="container mt-5">
-    <h3>Carrito de compras:</h3>
-    <ul id="carrito-lista" class="list-group">
-        <li class="list-group-item">El carrito está vacío.</li>
-    </ul>
-
-    <!-- Botón para realizar el pedido -->
-    <button id="btn-realizar-pedido" class="btn btn-warning mt-3">Realizar Pedido</button>
-</div>
-
-
-</div>
+        </div>
 
         <!-- Mostrar cliente -->
-<h3 class="mt-5">Tu usuario:</h3>
-<div class="list-group">
-    <?php
-    require_once '../src/Cliente.php'; // Asegúrate de incluir el archivo con la clase Cliente
+        <h3 class="mt-5">Lista de clientes:</h3>
+        <div class="list-group">
+            <?php
+            $sql = "SELECT * FROM clientes";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Número del cliente actual (puedes obtenerlo desde $_SESSION si corresponde)
-    $numeroCliente = '12345';
+            foreach ($clientes as $cliente) {
+                echo "<div class='list-group-item'>";
+                echo "Nombre: {$cliente['nombre']}, Número: {$cliente['numero']}, Pedidos realizados: {$cliente['num_pedidos']}<br>";
+                echo "</div>";
+            }
+            ?>
+        </div>
 
-    // Obtener el cliente utilizando el método obtenerClientePorNumero
-    $cliente = Cliente::obtenerClientePorNumero($pdo, $numeroCliente);
-
-    if ($cliente) {
-        echo "<div class='list-group-item'>";
-        echo "Nombre: {$cliente->getNombre()}, Número: {$cliente->getNumero()}, Compras realizadas: {$cliente->getNumPedidosEfectuados()}<br>";
-        echo "</div>";
-    } else {
-        echo "<div class='list-group-item'>No se encontró información para este cliente.</div>";
-    }
-    ?>
-</div>
-
-        <!-- Mostrar la lista de compras del cliente -->
+        <!-- Mostrar la lista de compras del cliente "usuario" -->
         <h3 class="mt-5">Lista de compras del cliente 'usuario':</h3>
         <div class="list-group">
             <?php
@@ -250,46 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-light text-center text-lg-start py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5 class="text-uppercase">Pastelería OC</h5>
-                    <p>Deliciosas tartas y dulces preparados con amor. ¡Elige tu favorito y disfruta!</p>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5 class="text-uppercase">Enlaces rápidos</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.php" class="text-dark">Página Principal</a></li>
-                        <li><a href="tienda.php" class="text-dark">Tienda</a></li>
-                        <li><a href="contacto.php" class="text-dark">Contacto</a></li>
-                        <li><a href="sobre-nosotros.php" class="text-dark">Sobre Nosotros</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5 class="text-uppercase">Síguenos</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="https://www.facebook.com" target="_blank" class="text-dark">Facebook</a></li>
-                        <li><a href="https://www.instagram.com" target="_blank" class="text-dark">Instagram</a></li>
-                        <li><a href="https://www.twitter.com" target="_blank" class="text-dark">Twitter</a></li>
-                        <li><a href="https://www.linkedin.com" target="_blank" class="text-dark">LinkedIn</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5 class="text-uppercase">Contáctanos</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="mailto:info@pasteleriaoc.com" class="text-dark">info@pasteleriaoc.com</a></li>
-                        <li><a href="tel:+1234567890" class="text-dark">+123 456 7890</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="text-center pt-4">
-                <p class="mb-0">© 2024 Pastelería OC. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
+    <!-- Cargar Bootstrap JS y dependencias -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
