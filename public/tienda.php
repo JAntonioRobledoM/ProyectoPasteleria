@@ -9,11 +9,11 @@ if (!isset($_SESSION['usuario'])) {
 
 $usuario = $_SESSION['usuario'];
 
-require_once '../db/db.php'; 
-require_once '../src/Dulce.php'; 
-require_once '../src/Chocolate.php'; 
-require_once '../src/Bollo.php'; 
-require_once '../src/Tarta.php'; 
+require_once '../db/db.php';
+require_once '../src/Dulce.php';
+require_once '../src/Chocolate.php';
+require_once '../src/Bollo.php';
+require_once '../src/Tarta.php';
 
 // Conectar a la base de datos
 $pdo = DB::getConnection();
@@ -94,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,12 +104,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
     <script defer src="js/carrito.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Pastelería OC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -130,8 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
         </div>
     </nav>
 
-<!-- Listar productos -->
-<div class="container mt-5">
+    <!-- Listar productos -->
+    <div class="container mt-5">
         <!-- Mostrar mensajes de sesión -->
         <?php
         if (isset($_SESSION['mensaje'])) {
@@ -152,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
                 echo "<div class='list-group-item list-group-item-action'>";
                 echo "<strong>{$dulce['nombre']}</strong><br>";
                 echo "Precio: {$dulce['precio']}€, Categoría: {$dulce['categoria']}<br>";
-            
+
                 // Información adicional
                 if (!empty($dulce['relleno'])) {
                     echo "Relleno: {$dulce['relleno']}<br>";
@@ -169,59 +172,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
                 if (isset($dulce['max_comensales'])) {
                     echo "Max. comensales: {$dulce['max_comensales']}<br>";
                 }
-            
+
                 // Botón para comprar el dulce
                 echo "<form method='POST' action='' class='mt-3'>
                         <input type='hidden' name='dulce_id' value='{$dulce['id']}'>
                         <button type='submit' class='btn btn-success'>Comprar</button>
                       </form>";
-            
+
                 // Botón para añadir al carrito
                 echo "<button class='btn btn-primary btn-añadir-carrito mt-2' 
                         data-id='{$dulce['id']}' 
                         data-nombre='{$dulce['nombre']}' 
                         data-precio='{$dulce['precio']}'>Añadir al carrito</button>";
-            
                 echo "</div><br>";
-
-                
             }
             ?>
 
-<div class="container mt-5">
-    <h3>Carrito de compras:</h3>
-    <ul id="carrito-lista" class="list-group">
-        <li class="list-group-item">El carrito está vacío.</li>
-    </ul>
+            <div class="container mt-5">
+                <h3>Carrito de compras:</h3>
+                <ul id="carrito-lista" class="list-group">
+                    <li class="list-group-item">El carrito está vacío.</li>
+                </ul>
 
-    <!-- Botón para realizar el pedido -->
-    <button id="btn-realizar-pedido" class="btn btn-warning mt-3">Realizar Pedido</button>
-</div>
-
-
-</div>
+                <!-- Botón para realizar el pedido -->
+                <button id="btn-realizar-pedido" class="btn btn-warning mt-3">Realizar Pedido</button>
+            </div>
+        </div>
 
         <!-- Mostrar cliente -->
-<h3 class="mt-5">Tu usuario:</h3>
-<div class="list-group">
-    <?php
-    require_once '../src/Cliente.php'; // Asegúrate de incluir el archivo con la clase Cliente
+        <h3 class="mt-5">Tu usuario:</h3>
+        <div class="list-group">
+            <?php
+            require_once '../src/Cliente.php';
 
-    // Número del cliente actual (puedes obtenerlo desde $_SESSION si corresponde)
-    $numeroCliente = '12345';
+            // Número del cliente actual (puedes obtenerlo desde $_SESSION si corresponde)
+            $numeroCliente = '12345';
 
-    // Obtener el cliente utilizando el método obtenerClientePorNumero
-    $cliente = Cliente::obtenerClientePorNumero($pdo, $numeroCliente);
+            // Obtener el cliente utilizando el método obtenerClientePorNumero
+            $cliente = Cliente::obtenerClientePorNumero($pdo, $numeroCliente);
 
-    if ($cliente) {
-        echo "<div class='list-group-item'>";
-        echo "Nombre: {$cliente->getNombre()}, Número: {$cliente->getNumero()}, Compras realizadas: {$cliente->getNumPedidosEfectuados()}<br>";
-        echo "</div>";
-    } else {
-        echo "<div class='list-group-item'>No se encontró información para este cliente.</div>";
-    }
-    ?>
-</div>
+            if ($cliente) {
+                echo "<div class='list-group-item'>";
+                echo "Nombre: {$cliente->getNombre()}, Número: {$cliente->getNumero()}, Compras realizadas: {$cliente->getNumPedidosEfectuados()}<br>";
+                echo "</div>";
+            } else {
+                echo "<div class='list-group-item'>No se encontró información para este cliente.</div>";
+            }
+            ?>
+        </div>
 
         <!-- Mostrar la lista de compras del cliente -->
         <h3 class="mt-5">Lista de compras del cliente 'usuario':</h3>
@@ -292,4 +290,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dulce_id'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

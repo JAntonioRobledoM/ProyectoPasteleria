@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_dulce'])) {
 
         // Convertir el campo relleno en un array
         $relleno = isset($_POST['relleno']) ? explode(',', $_POST['relleno']) : [];
-        
+
         $porcentaje_cacao = $_POST['porcentaje_cacao'] ?? null;
         $peso = $_POST['peso'] ?? null;
         $min_comensales = $_POST['min_comensales'] ?? 2;
@@ -60,10 +60,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_dulce'])) {
     }
 }
 
+// Procesar la eliminación de un dulce
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['eliminar_dulce_nombre'])) {
+    $nombre_dulce = $_POST['eliminar_dulce_nombre'];
+
+    // Eliminar el dulce usando su nombre
+    $sql = "DELETE FROM dulces WHERE nombre = :nombre";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':nombre', $nombre_dulce, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        $_SESSION['mensaje'] = "Dulce '$nombre_dulce' eliminado exitosamente!";
+    } else {
+        $_SESSION['mensaje'] = "Error al eliminar el dulce '$nombre_dulce'.";
+    }
+
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_dulce'])) {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -121,18 +144,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_dulce'])) {
             </div>
 
             <div class="mb-3">
-            <label for="relleno" class="form-label">Relleno (opcional):</label>
-            <input type="text" name="relleno" id="relleno" class="form-control" placeholder="Separar por coma si hay varios rellenos">
+                <label for="relleno" class="form-label">Relleno (opcional):</label>
+                <input type="text" name="relleno" id="relleno" class="form-control"
+                    placeholder="Separar por coma si hay varios rellenos">
             </div>
 
             <div class="mb-3">
-            <label for="porcentaje_cacao" class="form-label">Porcentaje de cacao (solo para chocolates):</label>
-            <input type="number" name="porcentaje_cacao" id="porcentaje_cacao" class="form-control" min="0" max="100">
+                <label for="porcentaje_cacao" class="form-label">Porcentaje de cacao (solo para chocolates):</label>
+                <input type="number" name="porcentaje_cacao" id="porcentaje_cacao" class="form-control" min="0"
+                    max="100">
             </div>
 
             <div class="mb-3">
-            <label for="peso" class="form-label">Peso (solo para chocolates y tartas):</label>
-            <input type="number" name="peso" id="peso" class="form-control">
+                <label for="peso" class="form-label">Peso (solo para chocolates y tartas):</label>
+                <input type="number" name="peso" id="peso" class="form-control">
             </div>
 
             <div class="mb-3">
@@ -150,58 +175,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['crear_dulce'])) {
 
         <!-- Mostrar los dulces existentes -->
         <h3 class="mt-5">Lista de dulces:</h3>
-<div class="list-group">
-    <?php
-    // Obtener todos los IDs de los dulces
-    $sql = "SELECT id FROM dulces";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $ids = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        <div class="list-group">
+            <?php
+            // Obtener todos los dulces de la base de datos
+            $sql = "SELECT id, nombre, categoria, precio FROM dulces";  // Agregamos 'precio' a la consulta
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $dulces = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Iterar sobre los IDs y obtener los dulces usando obtenerDulcePorId
-    foreach ($ids as $id) {
-        $dulce = Dulce::obtenerDulcePorId($pdo, $id['id']);
-        
-        if ($dulce) {
-            echo "<div class='list-group-item list-group-item-action'>";
-            echo "<strong>{$dulce->getNombre()}</strong><br>";
-            echo "Precio: {$dulce->getPrecio()}€, Categoría: {$dulce->getCategoria()}<br>";
-            echo "</div><br>";
-        }
-    }
-    ?>
-</div>
+            // Iterar sobre los dulces
+            foreach ($dulces as $dulce) {
+                echo "<div class='list-group-item list-group-item-action'>";
+                echo "<strong>{$dulce['nombre']}</strong><br>";
+                echo "Precio: {$dulce['precio']}€, Categoría: {$dulce['categoria']}<br>"; // Usamos 'precio' en lugar de 'usuario'
+                // Botón de eliminar con el nombre del dulce
+                echo "<form method='POST' action='' style='display:inline;'>";
+                echo "<input type='hidden' name='eliminar_dulce_nombre' value='{$dulce['nombre']}'>";
+                echo "<button type='submit' class='btn btn-danger btn-sm ms-3'>Eliminar</button>";
+                echo "</form>";
+                echo "</div><br>";
+            }
+            ?>
+        </div>
 
-<!-- Mostrar los clientes existentes -->
-<h3 class="mt-5">Lista de clientes:</h3>
-<div class="list-group">
-    <?php
-    // Obtener todos los clientes de la base de datos
-    $sql = "SELECT numero FROM clientes";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $numerosClientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        <!-- Mostrar los clientes existentes -->
+        <h3 class="mt-5">Lista de clientes:</h3>
+        <div class="list-group">
+            <?php
+            // Obtener todos los clientes de la base de datos
+            $sql = "SELECT numero FROM clientes";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $numerosClientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Iterar sobre los números de cliente y crear instancias de Cliente
-    foreach ($numerosClientes as $row) {
-        $cliente = Cliente::obtenerClientePorNumero($pdo, $row['numero']);
-        if ($cliente) {
-            echo "<div class='list-group-item list-group-item-action'>";
-            echo "<strong>Nombre: {$cliente->getNombre()}</strong><br>";
-            echo "Número: {$cliente->getNumero()}<br>";
-            echo "Pedidos Efectuados: {$cliente->getNumPedidosEfectuados()}";
-            echo "</div><br>";
-        } else {
-            echo "<div class='list-group-item list-group-item-danger'>";
-            echo "Error al cargar los datos del cliente con número {$row['numero']}.";
-            echo "</div>";
-        }
-    }
-    ?>
-</div>
-
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            // Iterar sobre los números de cliente y crear instancias de Cliente
+            foreach ($numerosClientes as $row) {
+                $cliente = Cliente::obtenerClientePorNumero($pdo, $row['numero']);
+                if ($cliente) {
+                    echo "<div class='list-group-item list-group-item-action'>";
+                    echo "<strong>Nombre: {$cliente->getNombre()}</strong><br>";
+                    echo "Número: {$cliente->getNumero()}<br>";
+                    echo "Pedidos Efectuados: {$cliente->getNumPedidosEfectuados()}";
+                    echo "</div><br>";
+                } else {
+                    echo "<div class='list-group-item list-group-item-danger'>";
+                    echo "Error al cargar los datos del cliente con número {$row['numero']}.";
+                    echo "</div>";
+                }
+            }
+            ?>
+        </div>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

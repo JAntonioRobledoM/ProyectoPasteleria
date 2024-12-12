@@ -12,6 +12,7 @@ $usuario = $_SESSION['usuario'];
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +20,14 @@ $usuario = $_SESSION['usuario'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Pastelería OC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -51,7 +54,9 @@ $usuario = $_SESSION['usuario'];
         <div class="row">
             <div class="col-lg-6">
                 <h2 class="display-4">¡Bienvenidos a Pastelería OC!</h2>
-                <p class="lead">En Pastelería OC nos dedicamos a ofrecer los mejores dulces y tartas, elaborados con los ingredientes más frescos y de alta calidad. Nuestra pasión por la pastelería se refleja en cada producto que creamos, brindando a nuestros clientes una experiencia única en cada bocado.</p>
+                <p class="lead">En Pastelería OC nos dedicamos a ofrecer los mejores dulces y tartas, elaborados con los
+                    ingredientes más frescos y de alta calidad. Nuestra pasión por la pastelería se refleja en cada
+                    producto que creamos, brindando a nuestros clientes una experiencia única en cada bocado.</p>
             </div>
             <div class="col-lg-6">
                 <img src="img/pasteleria.jpg" alt="Pastelería OC" class="img-fluid rounded">
@@ -65,10 +70,16 @@ $usuario = $_SESSION['usuario'];
             <h3 class="text-center mb-4">Nuestra Historia</h3>
             <div class="row">
                 <div class="col-md-6">
-                    <p>Pastelería OC fue fundada en 2010 con la misión de crear tartas, bollos y otros dulces que no solo fueran deliciosos, sino que también trajeran sonrisas a todos aquellos que los probaban. Desde nuestros humildes comienzos en un pequeño taller, nos hemos expandido para ofrecer nuestros productos a toda la comunidad, manteniendo siempre el compromiso de calidad y sabor.</p>
+                    <p>Pastelería OC fue fundada en 2010 con la misión de crear tartas, bollos y otros dulces que no
+                        solo fueran deliciosos, sino que también trajeran sonrisas a todos aquellos que los probaban.
+                        Desde nuestros humildes comienzos en un pequeño taller, nos hemos expandido para ofrecer
+                        nuestros productos a toda la comunidad, manteniendo siempre el compromiso de calidad y sabor.
+                    </p>
                 </div>
                 <div class="col-md-6">
-                    <p>Con una pasión por la repostería artesanal, cada uno de nuestros productos es hecho a mano, utilizando solo los mejores ingredientes. ¡Ven a visitarnos y descubre por qué somos la pastelería favorita de muchos!</p>
+                    <p>Con una pasión por la repostería artesanal, cada uno de nuestros productos es hecho a mano,
+                        utilizando solo los mejores ingredientes. ¡Ven a visitarnos y descubre por qué somos la
+                        pastelería favorita de muchos!</p>
                 </div>
             </div>
         </div>
@@ -80,11 +91,13 @@ $usuario = $_SESSION['usuario'];
         <div class="row">
             <div class="col-md-4">
                 <h5>Misión</h5>
-                <p>Proporcionar productos de pastelería deliciosos y de alta calidad, elaborados con ingredientes frescos y naturales, para deleitar a nuestros clientes en cada ocasión.</p>
+                <p>Proporcionar productos de pastelería deliciosos y de alta calidad, elaborados con ingredientes
+                    frescos y naturales, para deleitar a nuestros clientes en cada ocasión.</p>
             </div>
             <div class="col-md-4">
                 <h5>Visión</h5>
-                <p>Ser la pastelería de referencia en el pueblo, reconocida por la calidad de nuestros productos y la satisfacción de nuestros clientes.</p>
+                <p>Ser la pastelería de referencia en el pueblo, reconocida por la calidad de nuestros productos y la
+                    satisfacción de nuestros clientes.</p>
             </div>
             <div class="col-md-4">
                 <h5>Valores</h5>
@@ -107,7 +120,8 @@ $usuario = $_SESSION['usuario'];
                     <img src="img/persona1.jpg" alt="Miembro del equipo" class="rounded-circle mb-3">
                     <h5>Matito</h5>
                     <p>Chef Pastelero</p>
-                    <p>Matito es el corazón de nuestra pastelería, con más de 20 años de experiencia en la creación de postres únicos.</p>
+                    <p>Matito es el corazón de nuestra pastelería, con más de 20 años de experiencia en la creación de
+                        postres únicos.</p>
                 </div>
                 <div class="col-md-4 text-center">
                     <img src="img/persona2.jpg" alt="Miembro del equipo" class="rounded-circle mb-3">
@@ -171,4 +185,5 @@ $usuario = $_SESSION['usuario'];
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

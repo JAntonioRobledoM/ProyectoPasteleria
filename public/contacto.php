@@ -12,6 +12,7 @@ $usuario = $_SESSION['usuario'];
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,12 +20,14 @@ $usuario = $_SESSION['usuario'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Pastelería OC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -90,7 +93,9 @@ $usuario = $_SESSION['usuario'];
         <div class="row">
             <div class="col-12">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=...&q=Calle+Ficticia,+123,+Madrid" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe class="embed-responsive-item"
+                        src="https://www.google.com/maps/embed?pb=...&q=Calle+Ficticia,+123,+Madrid" allowfullscreen=""
+                        loading="lazy"></iframe>
                 </div>
             </div>
         </div>
@@ -148,4 +153,5 @@ $usuario = $_SESSION['usuario'];
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

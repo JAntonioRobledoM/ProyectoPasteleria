@@ -2,7 +2,8 @@
 
 require_once 'Dulce.php';
 
-class Chocolate extends Dulce {
+class Chocolate extends Dulce
+{
     private int $porcentajeCacao;
     private int $peso;
 
@@ -18,20 +19,24 @@ class Chocolate extends Dulce {
         $this->peso = $peso;
     }
 
-    public function muestraResumen(): void {
+    public function muestraResumen(): void
+    {
         echo "Chocolate: {$this->getNombre()}, Cacao: {$this->porcentajeCacao}%, Peso: {$this->peso}g, Precio: {$this->getPrecio()}€.<br>";
     }
 
-    public function getPorcentajeCacao(): float {
+    public function getPorcentajeCacao(): float
+    {
         return $this->porcentajeCacao;
     }
 
-    public function getPeso(): float {
+    public function getPeso(): float
+    {
         return $this->peso;
     }
 
     // Crear un chocolate en la base de datos
-    public static function crearChocolate(PDO $pdo, string $nombre, float $precio, string $categoria, int $porcentajeCacao, int $peso): bool {
+    public static function crearChocolate(PDO $pdo, string $nombre, float $precio, string $categoria, int $porcentajeCacao, int $peso): bool
+    {
         $sql = "INSERT INTO dulces (nombre, precio, categoria) VALUES (:nombre, :precio, :categoria)";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
@@ -42,7 +47,8 @@ class Chocolate extends Dulce {
     }
 
     // Leer todos los chocolates desde la base de datos
-    public static function obtenerChocolates(PDO $pdo): array {
+    public static function obtenerChocolates(PDO $pdo): array
+    {
         $sql = "SELECT * FROM dulces WHERE categoria = 'Chocolates'";
         $stmt = $pdo->query($sql);
         $chocolates = [];
@@ -53,19 +59,21 @@ class Chocolate extends Dulce {
     }
 
     // Actualizar un chocolate en la base de datos
-    public function actualizarChocolate(PDO $pdo): bool {
+    public function actualizarChocolate(PDO $pdo): bool
+    {
         $sql = "UPDATE dulces SET nombre = :nombre, precio = :precio, categoria = :categoria WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
             ':nombre' => $this->getNombre(),
             ':precio' => $this->getPrecio(),
             ':categoria' => $this->getCategoria(),
-            ':id' => $this->getId() // Asegurándonos de que el id está disponible
+            ':id' => $this->getId() 
         ]);
     }
 
     // Eliminar un chocolate de la base de datos
-    public function eliminarChocolate(PDO $pdo): bool {
+    public function eliminarChocolate(PDO $pdo): bool
+    {
         $sql = "DELETE FROM dulces WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([':id' => $this->getId()]);

@@ -6,7 +6,8 @@ require_once __DIR__ . '/../util/PasteleriaException.php';
 use util\DulceNoCompradoException;
 use util\ClienteNoEncontradoException;
 
-class Cliente {
+class Cliente
+{
     private int $numPedidosEfectuados = 0;
     private array $dulcesComprados = [];
 
@@ -18,41 +19,46 @@ class Cliente {
         $this->numPedidosEfectuados = $numPedidosEfectuados;
     }
 
-    public function getNombre(): string {
+    public function getNombre(): string
+    {
         return $this->nombre;
     }
 
-    public function getNumero(): string {
+    public function getNumero(): string
+    {
         return $this->numero;
     }
 
-    public function getNumPedidosEfectuados(): int {
+    public function getNumPedidosEfectuados(): int
+    {
         return $this->numPedidosEfectuados;
     }
 
-// Crear cliente en la base de datos
-public static function crearCliente(PDO $pdo, string $nombre, string $numero): bool {
-    // Verificar si el cliente ya existe en la base de datos
-    $clienteExistente = self::obtenerClientePorNumero($pdo, $numero);
+    // Crear cliente en la base de datos
+    public static function crearCliente(PDO $pdo, string $nombre, string $numero): bool
+    {
+        // Verificar si el cliente ya existe en la base de datos
+        $clienteExistente = self::obtenerClientePorNumero($pdo, $numero);
 
-    if ($clienteExistente) {
-        // El cliente ya existe, no lo insertamos nuevamente
-        echo "Error: El cliente con número '$numero' ya existe en la base de datos.<br>";
-        return false;
+        if ($clienteExistente) {
+            // El cliente ya existe, no lo insertamos nuevamente
+            echo "Error: El cliente con número '$numero' ya existe en la base de datos.<br>";
+            return false;
+        }
+
+        // Si no existe, proceder con la creación del nuevo cliente
+        $sql = "INSERT INTO clientes (nombre, numero) VALUES (:nombre, :numero)";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([
+            ':nombre' => $nombre,
+            ':numero' => $numero
+        ]);
     }
-
-    // Si no existe, proceder con la creación del nuevo cliente
-    $sql = "INSERT INTO clientes (nombre, numero) VALUES (:nombre, :numero)";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([
-        ':nombre' => $nombre,
-        ':numero' => $numero
-    ]);
-}
 
 
     // Obtener un cliente por su número
-    public static function obtenerClientePorNumero(PDO $pdo, string $numero): ?Cliente {
+    public static function obtenerClientePorNumero(PDO $pdo, string $numero): ?Cliente
+    {
         $sql = "SELECT * FROM clientes WHERE numero = :numero";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':numero' => $numero]);
@@ -65,7 +71,8 @@ public static function crearCliente(PDO $pdo, string $nombre, string $numero): b
     }
 
     // Actualizar los datos del cliente en la base de datos
-    public function actualizarCliente(PDO $pdo): bool {
+    public function actualizarCliente(PDO $pdo): bool
+    {
         $sql = "UPDATE clientes SET nombre = :nombre, num_pedidos = :num_pedidos WHERE numero = :numero";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
@@ -76,14 +83,16 @@ public static function crearCliente(PDO $pdo, string $nombre, string $numero): b
     }
 
     // Eliminar un cliente de la base de datos
-    public function eliminarCliente(PDO $pdo): bool {
+    public function eliminarCliente(PDO $pdo): bool
+    {
         $sql = "DELETE FROM clientes WHERE numero = :numero";
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([':numero' => $this->numero]);
     }
 
     // Valorar un dulce
-    public function valorar(Dulce $dulce, string $comentario): void {
+    public function valorar(Dulce $dulce, string $comentario): void
+    {
         if (in_array($dulce, $this->dulcesComprados)) {
             echo "Valoración del dulce '{$dulce->getNombre()}': $comentario<br>";
         } else {
