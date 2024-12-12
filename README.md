@@ -21,3 +21,5 @@ En la carpeta src encontramos la creacion de los dulces en backend
 
 Tenemos la clase Dulce.php, de la que heredan los diferentes dulces (Tarta, Bollo y Chocolate)
 Cada archivo por separado tiene sus constructores y las funciones CRUD utilizadas en los diferentes archivos del proyecto para el uso enlazado de la base de datos
+
+Tutorial de uso de la web en vídeo: https://youtu.be/Y0_PJa8BBFs
